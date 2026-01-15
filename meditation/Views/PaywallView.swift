@@ -433,3 +433,4 @@ struct PricingOption: View {
     PaywallView()
         .environmentObject(PurchaseManager.shared)
 }
+

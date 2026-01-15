@@ -95,3 +95,4 @@ struct HistoryPlaceholderView: View {
     MainTabView()
         .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }
+

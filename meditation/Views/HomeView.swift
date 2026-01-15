@@ -17,8 +17,20 @@ struct HomeView: View {
     )
     private var userProfiles: FetchedResults<UserProfile>
     
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \VoiceProfile.createdAt, ascending: false)],
+        animation: .default
+    )
+    private var voiceProfiles: FetchedResults<VoiceProfile>
+    
+    @State private var showVoiceSetup = false
+    
     private var userProfile: UserProfile? {
         userProfiles.first
+    }
+    
+    private var voiceProfile: VoiceProfile? {
+        voiceProfiles.first
     }
     
     var body: some View {
@@ -41,6 +53,9 @@ struct HomeView: View {
                             welcomeCard(profile: profile)
                         }
                         
+                        // Voice setup
+                        voiceSetupSection
+                        
                         // Main content placeholder
                         mainContentSection
                         
@@ -53,6 +68,9 @@ struct HomeView: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
+        }
+        .sheet(isPresented: $showVoiceSetup) {
+            VoiceSetupView()
         }
     }
     
@@ -146,11 +164,11 @@ struct HomeView: View {
     private var mainContentSection: some View {
         VStack(spacing: 24) {
             VStack(alignment: .leading, spacing: 8) {
-                Text("Your Main Feature")
+                Text("Meditation Scripts")
                     .font(.system(size: 18, weight: .medium, design: .serif))
                     .foregroundColor(AppTheme.pearl)
                 
-                Text("Replace this section with your app's primary functionality")
+                Text("Choose a script and generate a session in your voice.")
                     .font(.system(size: 13, weight: .light))
                     .foregroundColor(AppTheme.textMuted)
             }
@@ -158,13 +176,46 @@ struct HomeView: View {
             
             // Placeholder action button
             Button(action: {
-                // TODO: Add your main action here
+                // TODO: Add script browsing here
             }) {
-                Text("Get Started")
+                Text("Browse Scripts")
                     .etherealButton()
             }
         }
         .etherealCard(padding: 24)
+    }
+    
+    // MARK: - Voice Setup Section
+    
+    private var voiceSetupSection: some View {
+        VStack(spacing: 16) {
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Your Voice")
+                    .font(.system(size: 18, weight: .medium, design: .serif))
+                    .foregroundColor(AppTheme.pearl)
+                
+                Text(voiceStatusText)
+                    .font(.system(size: 13, weight: .light))
+                    .foregroundColor(AppTheme.textMuted)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            
+            Button(action: { showVoiceSetup = true }) {
+                Text(voiceProfile == nil ? "Set Up My Voice" : "Update Voice Profile")
+                    .etherealButton()
+            }
+        }
+        .etherealCard(padding: 24)
+    }
+    
+    private var voiceStatusText: String {
+        guard let profile = voiceProfile else {
+            return "Record or upload a short sample so we can create sessions in your voice."
+        }
+        
+        let rawStatus = profile.status ?? ""
+        let status = rawStatus.isEmpty ? "Unknown" : rawStatus.capitalized
+        return "Voice profile status: \(status)"
     }
     
     // MARK: - Feature Cards Section

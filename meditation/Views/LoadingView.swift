@@ -151,3 +151,4 @@ struct LoadingView: View {
 #Preview {
     LoadingView(isLoaded: .constant(false))
 }
+

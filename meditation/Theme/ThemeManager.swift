@@ -414,3 +414,4 @@ struct StarsBackgroundView: View {
         }
     }
 }
+

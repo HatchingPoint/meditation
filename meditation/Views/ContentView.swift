@@ -68,3 +68,4 @@ struct ContentView: View {
         .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
         .environmentObject(PurchaseManager.shared)
 }
+

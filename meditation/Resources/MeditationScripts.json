@@ -1,0 +1,30 @@
+[
+  {
+    "id": "5E68F0E0-2E6F-4D7B-9B1D-3EF1EEA5B3A2",
+    "title": "Calm Arrival",
+    "category": "Stress Relief",
+    "durationSeconds": 180,
+    "text": "Find a comfortable position. Let your shoulders soften. Take a slow breath in through the nose, and release it gently. Notice the support beneath you, the steadying presence of the floor or chair. With each exhale, allow the day to loosen its grip. Inhale calm. Exhale what you are ready to release. Stay here, breathing steadily, arriving fully into this moment."
+  },
+  {
+    "id": "B6F0C2C1-7CE0-4F4F-8B8A-9F5D3B4A6A3A",
+    "title": "Body Scan Reset",
+    "category": "Sleep",
+    "durationSeconds": 360,
+    "text": "Bring awareness to the top of your head. Soften your forehead, your eyes, your jaw. Let the relaxation move down the neck, across the shoulders, through the arms and hands. Invite the chest and belly to release. Soften the hips, the thighs, the knees. Let the relaxation flow all the way to your ankles and feet. You are safe here. The body knows how to rest."
+  },
+  {
+    "id": "D1B13D16-8F1C-4C7D-AF8F-4A9C2C4E74C9",
+    "title": "Morning Clarity",
+    "category": "Focus",
+    "durationSeconds": 240,
+    "text": "As you breathe, imagine the mind becoming clear like a still lake. Each breath smooths the surface. Notice any thoughts, let them pass like distant clouds. You do not need to hold them. Inhale brightness. Exhale distraction. With each breath, return to the simple feeling of being here, awake and present."
+  },
+  {
+    "id": "6C0F9F5A-5B92-4F4D-9C8E-2217A1BDB6B2",
+    "title": "Evening Wind Down",
+    "category": "Sleep",
+    "durationSeconds": 300,
+    "text": "Allow the pace of the day to slow. Let your breath lengthen. With every exhale, soften the muscles of the face, the neck, the shoulders. Release any effort. You have done enough for today. Rest is allowed. Rest is healing. Remain with the steady rhythm of your breath, gently guiding you toward sleep."
+  }
+]

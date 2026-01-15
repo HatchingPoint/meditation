@@ -22,6 +22,7 @@ struct SettingsView: View {
     @State private var showAbout = false
     @State private var showPrivacyPolicy = false
     @State private var showTermsOfService = false
+    @State private var showVoiceSetup = false
     
     private var userProfile: UserProfile? {
         userProfiles.first
@@ -51,6 +52,9 @@ struct SettingsView: View {
             .toolbarColorScheme(.dark, for: .navigationBar)
             .sheet(isPresented: $showEditProfile) {
                 EditProfileView(profile: userProfile)
+            }
+            .sheet(isPresented: $showVoiceSetup) {
+                VoiceSetupView()
             }
             .sheet(isPresented: $showAbout) {
                 AboutView()
@@ -126,6 +130,16 @@ struct SettingsView: View {
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 12)
                             .background(AppTheme.celestialBlue.opacity(0.1))
+                            .cornerRadius(12)
+                    }
+                    
+                    Button(action: { showVoiceSetup = true }) {
+                        Text("Set Up Voice")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(AppTheme.pearl)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 12)
+                            .background(Color.white.opacity(0.06))
                             .cornerRadius(12)
                     }
                 }
@@ -600,3 +614,4 @@ struct PolicySection: View {
     SettingsView()
         .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }
+

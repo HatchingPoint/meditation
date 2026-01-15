@@ -21,7 +21,11 @@ struct meditationApp: App {
                 .preferredColorScheme(.dark) // Force dark mode - remove for light mode support
                 .task {
                     await purchaseManager.configure()
+                    MeditationScriptSeeder.seedIfNeeded(
+                        context: persistenceController.container.viewContext
+                    )
                 }
         }
     }
 }
+

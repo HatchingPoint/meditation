@@ -58,7 +58,7 @@ enum AppConfig {
     /// Privacy Policy URL
     static let privacyPolicyURL = URL(string: "https://yourwebsite.com/privacy")!
     
-    /// Terms of Service URL
+    /// Terms of Service URL,
     static let termsOfServiceURL = URL(string: "https://yourwebsite.com/terms")!
     
     /// Support Email
@@ -71,13 +71,13 @@ enum AppConfig {
     // MARK: - Feature Flags
     
     /// Set to true to bypass paywall during development
-    static let debugBypassPaywall = false
+    static let debugBypassPaywall = true
     
     /// Enable onboarding flow (set false to skip)
-    static let enableOnboarding = true
+    static let enableOnboarding = false
     
     /// Enable loading/splash screen
-    static let enableLoadingScreen = true
+    static let enableLoadingScreen = false
     
     // MARK: - Paywall Configuration
     

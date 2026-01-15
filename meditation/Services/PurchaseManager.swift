@@ -187,3 +187,4 @@ enum StoreError: Error {
     case failedVerification
     case productNotFound
 }
+
