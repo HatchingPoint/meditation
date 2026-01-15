@@ -14,10 +14,21 @@ struct PersistenceController {
     static let preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
-        for _ in 0..<10 {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-        }
+        
+        // Create a sample UserProfile for previews
+        let sampleProfile = UserProfile(context: viewContext)
+        
+        // Set required non-optional fields
+        sampleProfile.setValue(UUID(), forKey: "id")
+        sampleProfile.setValue(Date(), forKey: "createdAt")
+        sampleProfile.setValue(Date(), forKey: "updatedAt")
+        
+        // Set optional fields
+        sampleProfile.setValue("Preview User", forKey: "name")
+        
+        // Set boolean field
+        sampleProfile.setValue(true, forKey: "hasCompletedOnboarding")
+        
         do {
             try viewContext.save()
         } catch {

@@ -1,8 +1,8 @@
 //
 //  ContentView.swift
-//  meditation
+//  AppTemplate
 //
-//  Created by Raymond on 1/14/26.
+//  Root content view - handles app flow: subscription → onboarding → main app
 //
 
 import SwiftUI
@@ -10,79 +10,61 @@ import CoreData
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
-
+    @EnvironmentObject var purchaseManager: PurchaseManager
+    
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
-        animation: .default)
-    private var items: FetchedResults<Item>
-
+        sortDescriptors: [NSSortDescriptor(keyPath: \UserProfile.createdAt, ascending: false)],
+        animation: .default
+    )
+    private var userProfiles: FetchedResults<UserProfile>
+    
+    @State private var isLoaded = false
+    
+    /// Check if user has completed onboarding
+    private var hasCompletedOnboarding: Bool {
+        guard let profile = userProfiles.first else { return false }
+        return profile.hasCompletedOnboarding
+    }
+    
     var body: some View {
-        NavigationView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-                    } label: {
-                        Text(item.timestamp!, formatter: itemFormatter)
-                    }
-                }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-#if os(iOS)
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-#endif
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-            Text("Select an item")
-        }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+        ZStack {
+            AppTheme.background1
+                .ignoresSafeArea()
+            
+            // Check subscription status first
+            if purchaseManager.isLoading {
+                // Still checking subscription status
+                loadingIndicator
+            } else if !purchaseManager.isSubscribed {
+                // Not subscribed - show paywall
+                PaywallView()
+            } else if !hasCompletedOnboarding && AppConfig.enableOnboarding {
+                // Subscribed but no profile - show onboarding
+                OnboardingView()
+            } else if !isLoaded && AppConfig.enableLoadingScreen {
+                // Has profile but still loading
+                LoadingView(isLoaded: $isLoaded)
+            } else {
+                // All good - show main app
+                MainTabView()
             }
         }
     }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            offsets.map { items[$0] }.forEach(viewContext.delete)
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
+    
+    private var loadingIndicator: some View {
+        VStack(spacing: 20) {
+            ProgressView()
+                .scaleEffect(1.2)
+            
+            Text("Loading...")
+                .font(.system(size: 14, weight: .light))
+                .foregroundColor(AppTheme.textMuted)
         }
     }
 }
 
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .medium
-    return formatter
-}()
-
 #Preview {
-    ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    ContentView()
+        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        .environmentObject(PurchaseManager.shared)
 }

@@ -2,7 +2,7 @@
 //  meditationApp.swift
 //  meditation
 //
-//  Created by Raymond on 1/14/26.
+//  App entry point - configure services and environment
 //
 
 import SwiftUI
@@ -11,11 +11,17 @@ import CoreData
 @main
 struct meditationApp: App {
     let persistenceController = PersistenceController.shared
-
+    @StateObject private var purchaseManager = PurchaseManager.shared
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environmentObject(purchaseManager)
+                .preferredColorScheme(.dark) // Force dark mode - remove for light mode support
+                .task {
+                    await purchaseManager.configure()
+                }
         }
     }
 }
